@@ -83,57 +83,91 @@
         .user-answer { color: #333; }
         .result-page { display: none; text-align: center; padding: 40px 20px; }
 
-        .result-score-container {
-            position: relative;
-            width: 200px;
-            height: 100px;
-            margin: 20px auto;
-            overflow: hidden;
-        }
-        .result-score-arc {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            border: 12px solid #e0e0e0;
-            border-bottom-color: transparent;
-            border-left-color: transparent;
-            transform: rotate(-135deg);
-            box-sizing: border-box;
-        }
-        .result-score-arc-fill {
-            position: position: absolute;
-            top: 0;
-            left: 0;
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            border: 12px solid transparent;
-            border-bottom-color: #0d7377;
-            border-left-color: #0d7377;
-            transform: rotate(-135deg);
-            box-sizing: border-box;
-            transition: transform 1s ease;
-        }
-        .result-score-text {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 48px;
-            font-weight: 700;
-            color: #0d7377;
-            font-family: 'Open Sans', sans-serif;
-        }
-        .result-score-label {
-            text-align: center;
-            font-size: 18px;
-            color: #666;
-            margin-top: 10px;
-            margin-bottom: 20px;
-        }
+               
+     .result-score-container {
+    position: relative;
+    width: 200px;
+    height: 120px;
+    margin: 20px auto;
+}
+
+.result-score-container svg {
+    display: block;
+}
+
+.result-score-text {
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 48px;
+    font-weight: 700;
+    color: #0d7377;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.result-score-label {
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+        
+.score-arc-bg,
+.score-arc-fill,
+.score-arc-center {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    box-sizing: border-box;
+}
+
+/* 底层灰色背景 */
+.score-arc-bg {
+    top: 0;
+    left: 0;
+    border: 12px solid #e0e0e0;
+    border-bottom-color: transparent;
+    border-right-color: transparent;
+    transform: rotate(-45deg);
+}
+
+/* 上层绿色进度 - 初始状态隐藏 */
+.score-arc-fill {
+    top: 0;
+    left: 0;
+    border: 12px solid transparent;
+    border-bottom-color: #4caf50;
+    border-right-color: #4caf50;
+    transform: rotate(-45deg); /* 0%时完全隐藏 */
+    transition: transform 0.8s ease, border-color 0.3s ease;
+}
+
+/* 中心遮罩，形成环形效果 */
+.score-arc-center {
+    top: 12px;
+    left: 12px;
+    width: 176px;
+    height: 176px;
+    background: white;
+    border-radius: 50%;
+}
+
+.result-score-text {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 48px;
+    font-weight: 700;
+    color: #0d7377;
+    font-family: 'Open Sans', sans-serif;
+    z-index: 10;
+}
+
+        
         .filter-btn {
             background: #ff6f00;
             color: white;
@@ -234,6 +268,22 @@
                 max-width: 100px;
             }
         }
+
+        #scoreArc {
+    transition: stroke-dasharray 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.blank-slot.dragging {
+    opacity: 0.5;
+    background: #e8f4f4;
+}
+
+.blank-slot.drag-over {
+    border-bottom-color: #ff6f00 !important;
+    background: #fff3e0;
+    transform: scale(1.05);
+}
+
     </style>
 </head>
 <body>
@@ -301,12 +351,29 @@
             </div>
                       <div id="resultArea" class="result-page">
                 <h1 class="page-title">Test Results</h1>
-                <div class="result-score-container">
-                    <div class="result-score-arc"></div>
-                    <div class="result-score-arc-fill" id="scoreArcFill"></div>
-                    <div class="result-score-text" id="scoreDisplayText">0%</div>
-                </div>
-                <div class="result-score-label" id="scoreDetail">0 / 10 correct</div>
+                         
+        <div class="result-score-container">
+    <svg width="200" height="120" viewBox="0 0 200 120">
+        <path d="M 20 100 A 80 80 0 0 1 180 100" 
+              fill="none" 
+              stroke="#e0e0e0" 
+              stroke-width="12" 
+              stroke-linecap="butt"/>
+
+        <<path id="scoreArc" 
+      d="M 20 100 A 80 80 0 0 1 180 100" 
+      fill="none" 
+      stroke="#0d7377" 
+      stroke-width="12" 
+      stroke-linecap="butt"
+      stroke-dasharray="0 251.2"/>
+
+    </svg>
+    <div class="result-score-text" id="scoreDisplayText">0%</div>
+</div>       
+
+                
+
                 <div style="margin-bottom: 20px;">
                     <button class="filter-btn" id="showAllBtn" onclick="showAllResults()">Show All</button>
                     <button class="filter-btn" id="showWrongBtn" onclick="showWrongOnly()">Show Wrong Only</button>
@@ -3182,7 +3249,7 @@ const allSetsData = [];
         let userAnswers = [];
         let submitted = false;
         let timerInterval = null;
-        let timeRemaining = 600;
+        let timeRemaining = 400;
         let timerVisible = true;
         let draggedElement = null;
 
@@ -3208,7 +3275,7 @@ const allSetsData = [];
             currentQuestion = 0;
             userAnswers = new Array(10).fill(null).map(function() { return []; });
             submitted = false;
-            timeRemaining = 600;
+            timeRemaining = 400;
             timerVisible = true;
             
             // 显示套题编号
@@ -3266,19 +3333,108 @@ const allSetsData = [];
                         slot.textContent = userAnswers[index][blankIndex];
                         slot.classList.add('filled');
                     }
-                    slot.addEventListener('dragover', handleDragOver);
-                    slot.addEventListener('dragleave', handleDragLeave);
-                    slot.addEventListener('drop', handleDrop);
+              slot.addEventListener('dragover', handleDragOver);
+slot.addEventListener('dragleave', handleDragLeave);
+// 注意：不要在这里绑定 handleDrop，因为下面已经有完整的 drop 处理了
+                    
+
+        
                     (function(currentBlankIndex) {
-                        slot.addEventListener('click', function() {
-                            if (slot.textContent && !submitted) {
-                                returnWordToOptions(slot.textContent, index);
-                                slot.textContent = '';
-                                slot.classList.remove('filled');
-                                userAnswers[index][currentBlankIndex] = null;
-                            }
-                        });
-                    })(blankIndex);
+    slot.addEventListener('click', function() {
+        if (slot.textContent && !submitted) {
+            returnWordToOptions(slot.textContent, index);
+            slot.textContent = '';
+            slot.classList.remove('filled');
+            userAnswers[index][currentBlankIndex] = null;
+        }
+    });
+    
+    // 添加拖动功能到已填写的slot
+    slot.draggable = true;
+    slot.addEventListener('dragstart', function(e) {
+        if (!slot.textContent || submitted) {
+            e.preventDefault();
+            return;
+        }
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', slot.textContent);
+        e.dataTransfer.setData('sourceSlot', currentBlankIndex);
+        slot.classList.add('dragging');
+    });
+    slot.addEventListener('dragend', function(e) {
+        slot.classList.remove('dragging');
+    });
+    slot.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        if (!submitted && slot !== e.target) {
+            slot.classList.add('drag-over');
+        }
+    });
+    slot.addEventListener('dragleave', function(e) {
+        slot.classList.remove('drag-over');
+    });
+
+    slot.addEventListener('drop', function(e) {
+    e.preventDefault();
+    e.stopPropagation(); // 阻止事件冒泡
+    slot.classList.remove('drag-over');
+    if (submitted) return;
+    
+    const sourceWord = e.dataTransfer.getData('text/plain');
+    const sourceSlotIndexStr = e.dataTransfer.getData('sourceSlot');
+    const targetWord = slot.textContent;
+    const targetSlotIndex = currentBlankIndex;
+    
+    // 如果源和目标相同，不做任何事
+    if (sourceSlotIndexStr === String(targetSlotIndex)) return;
+    
+    // 情况1：从选项栏拖来（sourceSlotIndex为空）
+    if (sourceSlotIndexStr === '' || sourceSlotIndexStr === null) {
+        // 目标slot有内容，先归还到选项栏
+        if (targetWord) {
+            returnWordToOptions(targetWord, index);
+        }
+        // 填入新词
+        slot.textContent = sourceWord;
+        slot.classList.add('filled');
+        userAnswers[index][targetSlotIndex] = sourceWord;
+        markOptionAsUsed(sourceWord, index);
+        return;
+    }
+    
+    // 情况2：从其他slot拖来
+    const sourceSlotIndex = parseInt(sourceSlotIndexStr);
+    const sourceSlot = document.querySelector('.blank-slot[data-index="' + sourceSlotIndex + '"]');
+    
+    if (!sourceSlot) return;
+    
+    // 目标为空：直接移动
+    if (!targetWord) {
+        sourceSlot.textContent = '';
+        sourceSlot.classList.remove('filled');
+        userAnswers[index][sourceSlotIndex] = null;
+        
+        slot.textContent = sourceWord;
+        slot.classList.add('filled');
+        userAnswers[index][targetSlotIndex] = sourceWord;
+    } 
+    // 目标有内容：交换
+    else {
+        // 源slot放目标词
+        sourceSlot.textContent = targetWord;
+        sourceSlot.classList.add('filled');
+        userAnswers[index][sourceSlotIndex] = targetWord;
+        
+        // 目标slot放源词
+        slot.textContent = sourceWord;
+        slot.classList.add('filled');
+        userAnswers[index][targetSlotIndex] = sourceWord;
+    }
+});
+
+})(blankIndex);
+
                     blankContainer.appendChild(slot);
                     blankIndex++;
                 }
@@ -3339,27 +3495,6 @@ const allSetsData = [];
 
         function handleDragLeave(e) {
             e.currentTarget.closest('.blank-container').classList.remove('drag-over');
-        }
-
-        function handleDrop(e) {
-            e.preventDefault();
-            const container = e.currentTarget.closest('.blank-container');
-            container.classList.remove('drag-over');
-            const word = e.dataTransfer.getData('text/plain');
-            const slot = e.currentTarget;
-            if (!slot.textContent && !submitted) {
-                const blankId = slot.dataset.blankId;
-                const parts = blankId.split('-');
-                const qIndex = parseInt(parts[0]);
-                const blankIndex = parseInt(parts[1]);
-                if (userAnswers[qIndex][blankIndex]) {
-                    returnWordToOptions(userAnswers[qIndex][blankIndex], qIndex);
-                }
-                slot.textContent = word;
-                slot.classList.add('filled');
-                userAnswers[qIndex][blankIndex] = word;
-                markOptionAsUsed(word, qIndex);
-            }
         }
 
         function fillNextBlank(word, qIndex, optionElement) {
@@ -3504,14 +3639,25 @@ const allSetsData = [];
                 resultCompare.appendChild(item);
             });
             const percentage = Math.round((correct / 10) * 100);
-            document.getElementById('scoreDisplayText').textContent = percentage + '%';
-            document.getElementById('scoreDetail').textContent = correct + ' / 10 correct';
-            
-            // 更新半圆进度环
-            const arcFill = document.getElementById('scoreArcFill');
-            const rotation = -135 + (percentage / 100) * 180;
-            arcFill.style.transform = 'rotate(' + rotation + 'deg)';
-            
+            document.getElementById('scoreDisplayText').textContent = percentage + '%';            
+
+        // 更新半圆进度环
+const scoreArc = document.getElementById('scoreArc');
+const totalLength = 251.2;
+const fillLength = (percentage / 100) * totalLength;
+
+scoreArc.setAttribute('stroke-dasharray', fillLength + ' ' + totalLength);    
+
+// 设置颜色：0%灰色，>0%绿色
+// 更新颜色
+if (percentage === 0) {
+    scoreArc.setAttribute('stroke', '#e0e0e0');
+    document.getElementById('scoreDisplayText').style.color = '#9e9e9e';
+} else {
+    scoreArc.setAttribute('stroke', '#0d7377');
+    document.getElementById('scoreDisplayText').style.color = '#0d7377';
+}
+
             userProgress[currentSetId] = { completed: true, score: percentage, answered: 10, correct: correct };
             localStorage.setItem('toefl_progress', JSON.stringify(userProgress));
             document.getElementById('quizArea').style.display = 'none';
@@ -3587,7 +3733,7 @@ const allSetsData = [];
             currentQuestion = 0;
             userAnswers = new Array(10).fill(null).map(function() { return []; });
             submitted = false;
-            timeRemaining = 600;
+            timeRemaining = 400;
             timerVisible = true;
             document.getElementById('reviewBtn').onclick = showReview;
             loadQuestion(0);
