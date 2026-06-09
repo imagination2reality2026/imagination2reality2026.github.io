@@ -7,6 +7,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; background: #f5f5f5; min-height: 100vh; }
@@ -284,6 +286,110 @@
     transform: scale(1.05);
 }
 
+/* 模式切换按钮 */
+.mode-switcher {
+    display: flex;
+    gap: 0;
+    background: #e8e8e8;
+    border-radius: 12px;
+    padding: 4px;
+    max-width: 400px;
+    margin: 0 auto 30px;
+}
+
+.mode-btn {
+    flex: 1;
+    padding: 12px 24px;
+    border: none;
+    background: transparent;
+    color: #666;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Open Sans', sans-serif;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.mode-btn:hover {
+    color: #333;
+}
+
+.mode-btn.active {
+    background: #0d7377;
+    color: white;
+    box-shadow: 0 2px 8px rgba(13, 115, 119, 0.3);
+}
+
+/* 分类练习卡片 */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.category-card {
+    background: white;
+    border-radius: 12px;
+    padding: 30px 25px;
+    border: 2px solid #e8e8e8;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+
+.category-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: #0d7377;
+    transition: height 0.3s ease;
+}
+
+.category-card:hover {
+    border-color: #0d7377;
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(13, 115, 119, 0.15);
+}
+
+.category-card:hover::before {
+    height: 6px;
+}
+
+.category-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.category-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.category-desc {
+    font-size: 14px;
+    color: #888;
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+    .mode-switcher {
+        max-width: 100%;
+    }
+    .mode-btn {
+        font-size: 14px;
+        padding: 10px 16px;
+    }
+}
+
     </style>
 </head>
 <body>
@@ -296,8 +402,28 @@
         <section class="home-hero">
             <h1>Build a Sentence</h1>
         </section>
+
         <main class="home-content">
-<h2 class="section-title"><img src="https://api.dicebear.com/10.x/micah/svg?eyebrowsVariant=up&hairVariant=full&facialHairVariant=&mouthVariant=smirk&baseColor=f9c9b6&eyesVariant=eyes,eyesShadow,round&hairColor=9287ff,fc909f&earsVariant=attached&earringColor=&clothesVariant=crew&shirtColor=fc909f,f4d150,e0ddff,6bd9e9&glassesVariant=&seed=qx581ork" alt="icon" style="width: 32px; height: 32px; vertical-align: middle; margin-right: 10px; border-radius: 50%;">点击任意套题，开始愉快地练习吧～</h2>            <div class="sets-grid" id="setsGrid"></div>
+    <!-- 练习模式切换 -->
+    <div class="mode-switcher" style="margin-bottom: 30px;">
+        <button class="mode-btn active" id="sequentialBtn" onclick="switchMode('sequential')">顺序练习</button>
+        <button class="mode-btn" id="categoryBtn" onclick="switchMode('category')">分类练习</button>
+    </div>
+    
+    <!-- 顺序练习区域 -->
+    <div id="sequentialArea">
+        <h2 class="section-title"><img src="https://api.dicebear.com/10.x/micah/svg?eyebrowsVariant=up&hairVariant=full&facialHairVariant=&mouthVariant=smirk&baseColor=f9c9b6&eyesVariant=eyes,eyesShadow,round&hairColor=9287ff,fc909f&earsVariant=attached&earringColor=&clothesVariant=crew&shirtColor=fc909f,f4d150,e0ddff,6bd9e9&glassesVariant=&seed=qx581ork" alt="icon" style="width: 32px; height: 32px; vertical-align: middle; margin-right: 10px; border-radius: 50%;">点击任意套题，开始愉快地练习吧～</h2>
+        <div class="sets-grid" id="setsGrid"></div>
+    </div>
+    
+    <!-- 分类练习区域（默认隐藏） -->
+    <div id="categoryArea" style="display: none;">
+        <h2 class="section-title"><img src="https://api.dicebear.com/10.x/micah/svg?eyebrowsVariant=up&hairVariant=full&facialHairVariant=&mouthVariant=smirk&baseColor=f9c9b6&eyesVariant=eyes,eyesShadow,round&hairColor=9287ff,fc909f&earsVariant=attached&earringColor=&clothesVariant=crew&shirtColor=fc909f,f4d150,e0ddff,6bd9e9&glassesVariant=&seed=qx581ork" alt="icon" style="width: 32px; height: 32px; vertical-align: middle; margin-right: 10px; border-radius: 50%;">选择句型，针对性练习你的弱项吧～</h2>
+        <div class="category-grid" id="categoryGrid"></div>
+    </div>
+</main>
+
+        <div class="sets-grid" id="setsGrid"></div>
         </main>
         <footer class="home-footer">
             <p>&#169; 2026 张晗老师 | All Rights Reserved</p>
@@ -3725,6 +3851,226 @@ const allSetsData = [];
         let timerVisible = true;
         let draggedElement = null;
 
+// 分类练习配置
+const categoryConfig = {
+    simple: { 
+        name: "简单句", 
+        desc: "Simple Sentence",
+        icon: "📝",
+        sets: [
+            ["1-2", "1-3", "1-4", "1-5", "1-6", "2-2", "2-3", "2-4", "2-7", "2-9"],
+            ["2-10", "3-1", "3-3", "3-4", "3-5", "3-7", "3-8", "4-1", "4-3", "4-4"],
+            ["4-5", "4-6", "4-10", "5-3", "5-6", "5-9", "5-10", "6-7", "6-9", "6-10"],
+            ["7-2", "7-4", "7-5", "7-6", "7-8", "8-1", "8-2", "8-3", "8-4", "8-5"],
+            ["8-6", "8-8", "9-4", "9-6", "9-7", "9-9", "10-9", "12-2", "12-3", "13-1"],
+            ["13-2", "13-6", "13-9", "13-10", "14-3", "14-8", "15-3", "16-4", "16-8", "16-9"],
+            ["16-10", "17-2", "17-3", "17-4", "17-6", "18-6", "18-8", "19-3", "19-5", "19-6"],
+            ["19-8", "20-1", "20-3", "20-4", "20-8", "21-2", "21-8", "22-2", "22-3", "22-8"],
+            ["23-5", "23-7", "23-8", "23-10", "24-1", "24-3", "24-4", "24-8", "25-3", "25-7"],
+            ["27-1", "27-2", "28-1", "28-6", "28-10", "29-5", "29-7", "29-10", "30-1", "30-4"],
+            ["30-6", "30-7", "30-9", "32-8", "32-9", "32-10", "33-2", "33-3", "33-9", "34-3"]
+        ]
+    },
+    question: { 
+        name: "疑问句", 
+        desc: "Interrogative Sentence",
+        icon: "❓",
+        sets: [
+            ["1-1", "3-6", "3-10", "5-2", "8-10", "9-1", "9-2", "9-5", "9-10", "10-2"],
+            ["10-5", "10-7", "17-5", "17-8", "17-10", "18-1", "18-3", "18-4", "18-5", "20-2"],
+            ["20-6", "20-7", "22-10", "24-6", "25-4", "25-5", "26-1", "26-2", "26-5", "26-6"],
+            ["27-9", "27-10", "28-2", "28-7", "29-4", "30-2", "30-8", "31-6", "31-10", "32-2"]
+        ]
+    },
+    objectClause: { 
+        name: "宾语从句", 
+        desc: "Object Clause",
+        icon: "🔗",
+        sets: [
+            ["1-10", "2-8", "3-2", "4-7", "4-8", "4-9", "5-1", "5-4", "5-8", "6-6"],
+            ["6-8", "7-1", "7-7", "7-9", "8-9", "9-8", "10-1", "10-4", "10-6", "10-8"],
+            ["11-3", "11-5", "11-6", "11-9", "11-10", "12-5", "12-6", "12-10", "13-3", "13-4"],
+            ["13-8", "14-5", "15-4", "15-6", "15-10", "16-1", "16-2", "16-6", "16-7", "17-7"],
+            ["17-9", "18-2", "18-7", "19-2", "19-9", "19-10", "22-9", "23-1", "23-2", "23-3"],
+            ["24-2", "24-5", "24-7", "24-10", "25-2", "25-6", "25-8", "25-9", "25-10", "26-3"],
+            ["26-4", "26-7", "26-8", "26-9", "26-10", "27-4", "27-7", "27-8", "28-5", "28-8"],
+            ["28-9", "29-1", "29-9", "30-3", "30-5", "30-10", "31-2", "31-3", "31-4", "31-5"],
+            ["31-7", "31-8", "31-9", "32-1", "32-3", "32-5", "33-1", "33-7", "34-6", "34-7"]
+        ]
+    },
+    attributive: { 
+        name: "定语从句", 
+        desc: "Relative Clause",
+        icon: "📎",
+        sets: [
+            ["1-7", "1-8", "1-9", "2-1", "2-5", "2-6", "4-2", "5-5", "5-7", "6-1"],
+            ["6-2", "6-4", "6-5", "7-3", "8-7", "9-3", "10-3", "10-10", "11-1", "11-2"],
+            ["11-4", "11-7", "11-8", "12-1", "12-4", "12-7", "12-8", "12-9", "13-5", "13-7"],
+            ["14-1", "14-6", "14-7", "14-10", "15-1", "15-2", "15-5", "15-7", "15-9", "16-3"],
+            ["16-5", "17-1", "18-10", "19-1", "19-7", "20-5", "20-9", "21-1", "21-3", "21-4"],
+            ["21-5", "21-6", "21-7", "21-9", "21-10", "22-1", "22-4", "22-5", "22-6", "22-7"],
+            ["23-4", "23-6", "23-9", "25-1", "27-3", "27-5", "27-6", "28-3", "28-4", "29-2"],
+            ["29-3", "32-4", "32-7", "33-5", "33-8", "33-10", "34-1", "34-2", "34-10", "35-5"]
+        ]
+    }
+};
+
+// 当前练习模式
+let currentMode = 'sequential';
+
+// 切换练习模式
+function switchMode(mode) {
+    currentMode = mode;
+    
+    // 更新按钮状态
+    document.getElementById('sequentialBtn').classList.toggle('active', mode === 'sequential');
+    document.getElementById('categoryBtn').classList.toggle('active', mode === 'category');
+    
+    // 切换显示区域
+    document.getElementById('sequentialArea').style.display = mode === 'sequential' ? 'block' : 'none';
+    document.getElementById('categoryArea').style.display = mode === 'category' ? 'block' : 'none';
+    
+    // 如果切换到分类模式，初始化分类网格
+    if (mode === 'category') {
+        initCategoryGrid();
+    }
+}
+
+// 初始化分类练习网格
+function initCategoryGrid() {
+    const grid = document.getElementById('categoryGrid');
+    grid.innerHTML = '';
+    
+    Object.keys(categoryConfig).forEach(key => {
+        const cat = categoryConfig[key];
+        const card = document.createElement('div');
+        card.className = 'category-card';
+        card.onclick = function() { startCategoryPractice(key); };
+        card.innerHTML = `
+            <span class="category-icon">${cat.icon}</span>
+            <div class="category-name">${cat.name}</div>
+            <div class="category-desc">${cat.desc}</div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+
+// 点击分类后，显示该分类下的套题列表
+function startCategoryPractice(categoryKey) {
+    const config = categoryConfig[categoryKey];
+    
+    // 检查是否已配置题号
+    if (!config.sets || config.sets.length === 0) {
+        alert('该分类的题目配置尚未完成，请先提供题号！');
+        return;
+    }
+    
+    // 隐藏分类卡片，显示套题列表
+    showCategorySets(categoryKey);
+}
+
+
+// 显示分类下的套题列表
+function showCategorySets(categoryKey) {
+    const config = categoryConfig[categoryKey];
+    const area = document.getElementById('categoryArea');
+    
+    // 构建套题列表HTML
+    let setsHtml = `
+        <div style="margin-bottom: 20px;">
+            <button onclick="backToCategory()" style="background: #0d7377; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-family: 'Open Sans', sans-serif; font-size: 14px; display: inline-flex; align-items: center; gap: 6px;">
+                <span>←</span> Back
+            </button>
+        </div>
+        <h2 class="section-title" style="margin-top: 20px;">
+            <span style="font-size: 32px; margin-right: 10px;">${config.icon}</span>
+            ${config.name} - 选择套题
+        </h2>
+        <div class="sets-grid" id="categorySetsGrid"></div>
+    `;
+    
+    area.innerHTML = setsHtml;
+    
+    // 渲染套题卡片
+    const grid = document.getElementById('categorySetsGrid');
+    grid.innerHTML = '';
+    
+    config.sets.forEach((setQuestions, index) => {
+        const setNum = index + 1;
+        const card = document.createElement('div');
+        card.className = 'set-card';
+        card.onclick = function() { startCategorySet(categoryKey, index); };
+        card.innerHTML = `
+            <div class="set-number">${config.name} Set ${String(setNum).padStart(2, '0')}</div>
+            <div class="set-meta"><span>10 Questions</span><span class="set-status">→ Start</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+// 返回分类选择页面
+function backToCategory() {
+    const area = document.getElementById('categoryArea');
+    
+    // 恢复分类区域原始HTML结构
+    area.innerHTML = `
+        <h2 class="section-title"><img src="https://api.dicebear.com/10.x/micah/svg?eyebrowsVariant=up&hairVariant=full&facialHairVariant=&mouthVariant=smirk&baseColor=f9c9b6&eyesVariant=eyes,eyesShadow,round&hairColor=9287ff,fc909f&earsVariant=attached&earringColor=&clothesVariant=crew&shirtColor=fc909f,f4d150,e0ddff,6bd9e9&glassesVariant=&seed=qx581ork" alt="icon" style="width: 32px; height: 32px; vertical-align: middle; margin-right: 10px; border-radius: 50%;">选择分类，针对性练习</h2>
+        <div class="category-grid" id="categoryGrid"></div>
+    `;
+    
+    // 重新初始化分类网格
+    initCategoryGrid();
+}
+
+// 开始具体某套分类练习
+function startCategorySet(categoryKey, setIndex) {
+    const config = categoryConfig[categoryKey];
+    const questionIds = config.sets[setIndex];
+    
+    // 从全局套题中抽取题目
+    const selectedQuestions = questionIds.map(id => {
+        const [setId, qId] = id.split('-').map(Number);
+        if (setId > allSetsData.length || !allSetsData[setId - 1]) {
+            console.error('Invalid set ID:', setId);
+            return null;
+        }
+        const question = allSetsData[setId - 1].questions[qId - 1];
+        if (!question) {
+            console.error('Invalid question ID:', qId, 'in set', setId);
+            return null;
+        }
+        // 返回题目副本，避免修改原题
+        return JSON.parse(JSON.stringify(question));
+    }).filter(q => q !== null);
+    
+    // 创建临时套题
+    currentSetId = `cat-${categoryKey}-${setIndex + 1}`;
+    currentSet = {
+        id: currentSetId,
+        name: `${config.name} Set ${setIndex + 1}`,
+        questions: selectedQuestions
+    };
+    
+    // 重置状态
+    currentQuestion = 0;
+    userAnswers = new Array(selectedQuestions.length).fill(null).map(() => []);
+    submitted = false;
+    timeRemaining = 400;
+    timerVisible = true;
+    
+    // 显示套题编号
+    document.getElementById('setNumberDisplay').textContent = `${config.name} Set ${setIndex + 1}`;
+    
+    // 进入答题页面
+    document.getElementById('homePage').style.display = 'none';
+    document.getElementById('quizPageContainer').style.display = 'block';
+    loadQuestion(0);
+    startTimer();
+    updateNavButtons();
+}
+
         function initHome() {
             const grid = document.getElementById('setsGrid');
             grid.innerHTML = '';
@@ -3760,15 +4106,27 @@ const allSetsData = [];
             updateNavButtons();
         }
 
+
         function goHome() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-            }
-            document.getElementById('quizPageContainer').style.display = 'none';
-            document.getElementById('homePage').style.display = 'flex';
-            initHome();
-        }
+    if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+    document.getElementById('quizPageContainer').style.display = 'none';
+    document.getElementById('homePage').style.display = 'flex';
+    
+    // 重置为顺序练习模式
+    switchMode('sequential');
+    
+    // 恢复分类区域原始内容（防止套题列表残留）
+    const categoryArea = document.getElementById('categoryArea');
+    categoryArea.innerHTML = `
+        <h2 class="section-title"><img src="https://api.dicebear.com/10.x/micah/svg?eyebrowsVariant=up&hairVariant=full&facialHairVariant=&mouthVariant=smirk&baseColor=f9c9b6&eyesVariant=eyes,eyesShadow,round&hairColor=9287ff,fc909f&earsVariant=attached&earringColor=&clothesVariant=crew&shirtColor=fc909f,f4d150,e0ddff,6bd9e9&glassesVariant=&seed=qx581ork" alt="icon" style="width: 32px; height: 32px; vertical-align: middle; margin-right: 10px; border-radius: 50%;">选择分类，针对性练习</h2>
+        <div class="category-grid" id="categoryGrid"></div>
+    `;
+    
+    initHome();
+}
 
         function getBlankCount(q) {
             return q.correctAnswer.length - q.fixedPositions.length;
