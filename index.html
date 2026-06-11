@@ -4485,8 +4485,7 @@ const allSetsData = [];
 
 
         // ========== Google Sheets 数据上报配置 ==========
-        // 【重要】部署Google Apps Script后，将Web App URL填入此处
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzWpj2kyWISjRBwiLkbvY_aio_Nm0pzHky4OwAZZ5Cqj1F9FJNIZT3UQb5BogKrhhMKXg/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxe55PnFn8DOYL3pEbvPfPDqdrMReMx_hEIhHyW06RbxrAa-tcla9aHHCc7lGNTWlQr2A/exec';
         
         // 生成/获取用户唯一ID
         function getUserId() {
@@ -4507,37 +4506,35 @@ const allSetsData = [];
             
             const userId = getUserId();
             const timestamp = new Date().toISOString();
-            const setName = currentSet ? currentSet.name : 'Unknown';
             const totalQuestions = currentSet ? currentSet.questions.length : 10;
             
-            // 构建每道题的答题详情
-            const questionDetails = [];
+            // 收集错题题号
+            const wrongQuestions = [];
             if (currentSet && currentSet.questions) {
                 currentSet.questions.forEach(function(q, idx) {
                     const isCorrect = checkAnswer(idx);
-                    const userAns = buildSentence(idx);
-                    const correctAns = buildCorrectSentence(idx);
-                    questionDetails.push({
-                        qNum: idx + 1,
-                        correct: isCorrect,
-                        userAnswer: userAns,
-                        correctAnswer: correctAns
-                    });
+                    if (!isCorrect) {
+                        wrongQuestions.push(idx + 1); // 题号从1开始
+                    }
                 });
             }
+            
+            // 错题题号用逗号连接，如果没有错题显示"无"
+            const wrongQuestionsStr = wrongQuestions.length > 0 
+                ? wrongQuestions.join(', ') 
+                : '无';
             
             // 构建上报数据
             const params = new URLSearchParams();
             params.append('userId', userId);
             params.append('timestamp', timestamp);
-            params.append('setName', setName);
             params.append('setId', String(currentSetId));
             params.append('totalQuestions', String(totalQuestions));
             params.append('correctCount', String(correctCount));
             params.append('wrongCount', String(totalQuestions - correctCount));
             params.append('score', String(percentage));
             params.append('timeSpent', String(400 - timeRemaining));
-            params.append('questionDetails', JSON.stringify(questionDetails));
+            params.append('wrongQuestions', wrongQuestionsStr); // 错题题号
             
             // 使用图片请求发送（避免CORS预检）
             const img = new Image();
@@ -4545,9 +4542,9 @@ const allSetsData = [];
             
             console.log('练习数据已上报:', {
                 userId: userId,
-                setName: setName,
+                setId: currentSetId,
                 score: percentage + '%',
-                correct: correctCount + '/' + totalQuestions
+                wrongQuestions: wrongQuestionsStr
             });
         }
         // ========== Google Sheets 配置结束 ==========
