@@ -4485,7 +4485,7 @@ const allSetsData = [];
 
 
         // ========== Google Sheets 数据上报配置 ==========
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxe55PnFn8DOYL3pEbvPfPDqdrMReMx_hEIhHyW06RbxrAa-tcla9aHHCc7lGNTWlQr2A/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxC4BD2Xp8sG9xGuy1UHxo96gA3tCEhiCsOFfUk2ZPv2MfVN7adRTkJ2qrsIZrNuZEDWg/exec';
         
         // 生成/获取用户唯一ID
         function getUserId() {
@@ -4505,7 +4505,16 @@ const allSetsData = [];
             }
             
             const userId = getUserId();
-            const timestamp = new Date().toISOString();
+const timestamp = new Date().toLocaleString('zh-CN', { 
+    timeZone: 'Asia/Shanghai',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+}).replace(/\//g, '-');
             const totalQuestions = currentSet ? currentSet.questions.length : 10;
             
             // 收集错题题号
@@ -4515,38 +4524,7 @@ const allSetsData = [];
                     const isCorrect = checkAnswer(idx);
                     if (!isCorrect) {
                         wrongQuestions.push(idx + 1); // 题号从1开始
-                    }
-                });
-            }
-            
-            // 错题题号用逗号连接，如果没有错题显示"无"
-            const wrongQuestionsStr = wrongQuestions.length > 0 
-                ? wrongQuestions.join(', ') 
-                : '无';
-            
-            // 构建上报数据
-            const params = new URLSearchParams();
-            params.append('userId', userId);
-            params.append('timestamp', timestamp);
-            params.append('setId', String(currentSetId));
-            params.append('totalQuestions', String(totalQuestions));
-            params.append('correctCount', String(correctCount));
-            params.append('wrongCount', String(totalQuestions - correctCount));
-            params.append('score', String(percentage));
-            params.append('timeSpent', String(400 - timeRemaining));
-            params.append('wrongQuestions', wrongQuestionsStr); // 错题题号
-            
-            // 使用图片请求发送（避免CORS预检）
-            const img = new Image();
-            img.src = GOOGLE_SCRIPT_URL + '?' + params.toString();
-            
-            console.log('练习数据已上报:', {
-                userId: userId,
-                setId: currentSetId,
-                score: percentage + '%',
-                wrongQuestions: wrongQuestionsStr
-            });
-        }
+           
         // ========== Google Sheets 配置结束 ==========
 
 
