@@ -4483,6 +4483,77 @@ const allSetsData = [];
             });
         }
 
+
+        // ========== Google Sheets 数据上报配置 ==========
+        // 【重要】部署Google Apps Script后，将Web App URL填入此处
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzWpj2kyWISjRBwiLkbvY_aio_Nm0pzHky4OwAZZ5Cqj1F9FJNIZT3UQb5BogKrhhMKXg/exec';
+        
+        // 生成/获取用户唯一ID
+        function getUserId() {
+            let uid = localStorage.getItem('practice_user_id');
+            if (!uid) {
+                uid = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+                localStorage.setItem('practice_user_id', uid);
+            }
+            return uid;
+        }
+        
+        // 上报数据到Google Sheets（使用图片请求，避免CORS）
+        function submitToGoogleSheets(correctCount, percentage) {
+            if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes('你的部署ID')) {
+                console.log('Google Sheets URL未配置，跳过上报');
+                return;
+            }
+            
+            const userId = getUserId();
+            const timestamp = new Date().toISOString();
+            const setName = currentSet ? currentSet.name : 'Unknown';
+            const totalQuestions = currentSet ? currentSet.questions.length : 10;
+            
+            // 构建每道题的答题详情
+            const questionDetails = [];
+            if (currentSet && currentSet.questions) {
+                currentSet.questions.forEach(function(q, idx) {
+                    const isCorrect = checkAnswer(idx);
+                    const userAns = buildSentence(idx);
+                    const correctAns = buildCorrectSentence(idx);
+                    questionDetails.push({
+                        qNum: idx + 1,
+                        correct: isCorrect,
+                        userAnswer: userAns,
+                        correctAnswer: correctAns
+                    });
+                });
+            }
+            
+            // 构建上报数据
+            const params = new URLSearchParams();
+            params.append('userId', userId);
+            params.append('timestamp', timestamp);
+            params.append('setName', setName);
+            params.append('setId', String(currentSetId));
+            params.append('totalQuestions', String(totalQuestions));
+            params.append('correctCount', String(correctCount));
+            params.append('wrongCount', String(totalQuestions - correctCount));
+            params.append('score', String(percentage));
+            params.append('timeSpent', String(400 - timeRemaining));
+            params.append('questionDetails', JSON.stringify(questionDetails));
+            
+            // 使用图片请求发送（避免CORS预检）
+            const img = new Image();
+            img.src = GOOGLE_SCRIPT_URL + '?' + params.toString();
+            
+            console.log('练习数据已上报:', {
+                userId: userId,
+                setName: setName,
+                score: percentage + '%',
+                correct: correctCount + '/' + totalQuestions
+            });
+        }
+        // ========== Google Sheets 配置结束 ==========
+
+
+
         let userProgress = JSON.parse(localStorage.getItem('toefl_progress') || '{}');
         let currentSetId = null;
         let currentSet = null;
@@ -5140,6 +5211,8 @@ if (percentage === 0) {
             // 默认显示全部，激活Show All按钮
             showAllResults();
             document.getElementById('reviewBtn').onclick = showReviewWithAnswers;
+            // Google Sheets
+            submitToGoogleSheets(correct, percentage);
         }
 
         function showAllResults() {
