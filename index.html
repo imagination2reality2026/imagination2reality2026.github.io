@@ -5170,6 +5170,11 @@ slot.addEventListener('dragleave', handleDragLeave);
         }
 
                 function submitAll() {
+  if (submitted) {
+                console.log('已经提交过了');
+                return;
+            }
+
             submitted = true;
             if (timerInterval) {
                 clearInterval(timerInterval);
@@ -5263,22 +5268,31 @@ if (percentage === 0) {
             document.getElementById('showWrongBtn').classList.add('active');
         }
 
+
         function checkAnswer(idx) {
-    const q = currentSet.questions[idx];
-    const userAns = userAnswers[idx];
-    if (!userAns || userAns.some(function(a) { return a === null || a === undefined; })) return false;
-    let blankIdx = 0;
-    for (let i = 0; i < q.correctAnswer.length; i++) {
-        if (q.fixedPositions.indexOf(i) < 0) {
-            if (userAns[blankIdx] && q.correctAnswer[i] && 
-                userAns[blankIdx].toLowerCase() !== q.correctAnswer[i].toLowerCase()) {
+            const q = currentSet.questions[idx];
+            const userAns = userAnswers[idx];
+            
+            // 检查是否有任何空未填
+            if (!userAns || userAns.some(function(a) { 
+                return a === null || a === undefined || a === ''; 
+            })) {
                 return false;
             }
-            blankIdx++;
+            
+            let blankIdx = 0;
+            for (let i = 0; i < q.correctAnswer.length; i++) {
+                if (q.fixedPositions.indexOf(i) < 0) {
+                    // 必须比较，没填也判错
+                    if (!userAns[blankIdx] || !q.correctAnswer[i] || 
+                        userAns[blankIdx].toLowerCase() !== q.correctAnswer[i].toLowerCase()) {
+                        return false;
+                    }
+                    blankIdx++;
+                }
+            }
+            return true;
         }
-    }
-    return true;
-}
 
         function showReviewWithAnswers() {
             showReview();
