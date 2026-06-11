@@ -4524,7 +4524,38 @@ const timestamp = new Date().toLocaleString('zh-CN', {
                     const isCorrect = checkAnswer(idx);
                     if (!isCorrect) {
                         wrongQuestions.push(idx + 1); // 题号从1开始
-           
+                    }
+                });
+            }
+            
+            // 错题题号用逗号连接，如果没有错题显示"无"
+            const wrongQuestionsStr = wrongQuestions.length > 0 
+                ? wrongQuestions.join(', ') 
+                : '无';
+            
+            // 构建上报数据
+            const params = new URLSearchParams();
+            params.append('userId', userId);
+            params.append('timestamp', timestamp);
+            params.append('setId', String(currentSetId));
+            params.append('totalQuestions', String(totalQuestions));
+            params.append('correctCount', String(correctCount));
+            params.append('wrongCount', String(totalQuestions - correctCount));
+            params.append('score', String(percentage));
+            params.append('timeSpent', String(400 - timeRemaining));
+            params.append('wrongQuestions', wrongQuestionsStr); // 错题题号
+            
+            // 使用图片请求发送（避免CORS预检）
+            const img = new Image();
+            img.src = GOOGLE_SCRIPT_URL + '?' + params.toString();
+            
+            console.log('练习数据已上报:', {
+                userId: userId,
+                setId: currentSetId,
+                score: percentage + '%',
+                wrongQuestions: wrongQuestionsStr
+            });
+        }
         // ========== Google Sheets 配置结束 ==========
 
 
