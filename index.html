@@ -60,7 +60,7 @@
         .avatar { width: 60px; height: 60px; border-radius: 50%; border: 3px solid #0d7377; overflow: hidden; flex-shrink: 0; background: #e8f4f4; display: flex; align-items: center; justify-content: center; font-size: 24px; }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
         .dialogue-text { font-size: 18px; color: #333; line-height: 1.6; padding-top: 15px; font-family: 'Open Sans', sans-serif; }
-        .blank-container { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-height: 50px; padding: 15px; background: white; border-radius: 8px; border: 2px solid #e0e0e0; margin-bottom: 30px; transition: all 0.3s; }
+        .blank-container { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-height: 50px; padding: 15px 0; margin-bottom: 30px; }
         .blank-container.drag-over { border-color: #0d7377; background: #e8f4f4; }
         .blank-slot { display: inline-flex; align-items: center; justify-content: center; min-width: 80px; height: 40px; border-bottom: 2px solid #333; margin: 0 4px; font-size: 16px; color: #333; transition: all 0.3s; font-family: 'Open Sans', sans-serif; cursor: pointer; padding: 0 8px; }
         .blank-slot:hover { border-bottom-color: #0d7377; }
@@ -423,7 +423,6 @@
     </div>
 </main>
 
-        <div class="sets-grid" id="setsGrid"></div>
         </main>
         <footer class="home-footer">
             <p>&#169; 2026 张晗老师 | All Rights Reserved</p>
@@ -4412,8 +4411,399 @@ const set42Questions = [
         options: ["confirmed so", "far", "to know", "which speakers", "have been"],
         correctAnswer: ["They wanted", "to know", "which speakers", "have been", "confirmed so", "far"],
         endingPunctuation: "."
+    },
+    {
+        id: 9,
+        question: "I just bought a new bike for my morning ride to class.",
+        fixedWords: ["Is"],
+        fixedPositions: [0],
+        options: ["ride", "to", "it", "comfortable"],
+        correctAnswer: ["Is", "it", "comfortable", "to", "ride"],
+        endingPunctuation: "?"
+    },
+    {
+        id: 10,
+        question: "The university is hosting a networking event next Friday.",
+        fixedWords: ["auditorium"],
+        fixedPositions: [6],
+        options: ["know whether", "do you", "in the", "it will", "main", "be held"],
+        correctAnswer: ["Do you", "know whether", "it will", "be held", "in the", "main", "auditorium"],
+        endingPunctuation: "?"
     }
 ];
+
+const set43Questions = [
+    {
+        id: 1,
+        question: "Who is in charge of the group project for psychology class?",
+        fixedWords: [],
+        fixedPositions: [],
+        options: ["leading", "it", "is", "I'm", "sure", "who", "not"],
+        correctAnswer: ["I'm", "not", "sure", "who", "is", "leading", "it"],
+        endingPunctuation: "."
+    },
+    {
+        id: 2,
+        question: "Where can I buy textbooks?",
+        fixedWords: [],
+        fixedPositions: [],
+        options: ["purchase", "would you", "to", "like", "what", "kind of", "textbook"],
+        correctAnswer: ["What", "kind of", "textbook", "would you", "like", "to", "purchase"],
+        endingPunctuation: "?"
+    },
+    {
+        id: 3,
+        question: "Who is your favorite author?",
+        fixedWords: [],
+        fixedPositions: [],
+        options: ["sure", "best", "the", "who", "I'm not", "I", "like"],
+        correctAnswer: ["I'm not", "sure", "who", "I", "like", "the", "best"],
+        endingPunctuation: "."
+    },
+    {
+        id: 4,
+        question: "Is there any way you can help me with this homework equation?",
+        fixedWords: [],
+        fixedPositions: [],
+        options: ["with", "math problem", "no, I'm", "that", "particular", "not", "familiar"],
+        correctAnswer: ["No, I'm", "not", "familiar", "with", "that", "particular", "math problem"],
+        endingPunctuation: "."
+    },
+    {
+        id: 5,
+        question: "Who is organizing the college's charity run?",
+        fixedWords: ["is"],
+        fixedPositions: [6],
+        options: ["don't", "know", "coordinator", "I", "the", "who"],
+        correctAnswer: ["I", "don't", "know", "who", "the", "coordinator", "is"],
+        endingPunctuation: "."
+    },
+    {
+        id: 6,
+        question: "Where is the best place to eat around campus?",
+        fixedWords: [],
+        fixedPositions: [],
+        options: ["of restaurant", "me", "you're", "looking", "for", "what type", "can you tell"],
+        correctAnswer: ["Can you tell", "me", "what type", "of restaurant", "you're", "looking", "for"],
+        endingPunctuation: "?"
+    },
+    {
+        id: 7,
+        question: "Did you invite Sarah to the graduation party?",
+        fixedWords: [],
+        fixedPositions: [],
+        options: ["no,", "an invitation", "send", "I", "forgot", "to", "her"],
+        correctAnswer: ["No,", "I", "forgot", "to", "send", "her", "an invitation"],
+        endingPunctuation: "."
+    },
+    {
+        id: 8,
+        question: "Who prepared the presentation?",
+        fixedWords: ["sure"],
+        fixedPositions: [2],
+        options: ["I'm", "who", "worked", "on it", "not"],
+        correctAnswer: ["I'm", "not", "sure", "who", "worked", "on it"],
+        endingPunctuation: "."
+    },
+    {
+        id: 9,
+        question: "Who is leading the robotics club meeting tomorrow?",
+        fixedWords: ["I"],
+        fixedPositions: [0],
+        options: ["in", "who", "charge", "of it", "don't", "is", "know"],
+        correctAnswer: ["I", "don't", "know", "who", "is", "in", "charge", "of it"],
+        endingPunctuation: "."
+    },
+    {
+        id: 10,
+        question: "I stayed up late finishing my assignment last night.",
+        fixedWords: [],
+        fixedPositions: [],
+        options: ["did", "you", "submit", "time", "to", "it on", "manage"],
+        correctAnswer: ["Did", "you", "manage", "to", "submit", "it on", "time"],
+        endingPunctuation: "?"
+    }
+];
+
+const set44Questions = [
+    {
+        id: 1,
+        question: "Why didn't you bring your notes to the study group?",
+        fixedWords: [],
+        fixedPositions: [],
+        options: ["at", "I", "them", "home", "forgot"],
+        correctAnswer: ["I", "forgot", "them", "at", "home"],
+        endingPunctuation: "."
+    },
+    {
+        id: 2,
+        question: "Why haven't you submitted your homework?",
+        fixedWords: ["had"],
+        fixedPositions: [1],
+        options: ["some difficulty", "the assignment", "understanding", "I"],
+        correctAnswer: ["I", "had", "some difficulty", "understanding", "the assignment"],
+        endingPunctuation: "."
+    },
+    {
+        id: 3,
+        question: "I just bought a new backpack to carry my books.",
+        fixedWords: [],
+        fixedPositions: [],
+        options: ["do you", "discounts", "students", "for", "if they", "know", "offer"],
+        correctAnswer: ["Do you", "know", "if they", "offer", "discounts", "for", "students"],
+        endingPunctuation: "?"
+    },
+    {
+        id: 4,
+        question: "Why didn't you join the virtual class?",
+        fixedWords: ["technical"],
+        fixedPositions: [2],
+        options: ["my", "with", "computer", "had", "I", "difficulties"],
+        correctAnswer: ["I", "had", "technical", "difficulties", "with", "my", "computer"],
+        endingPunctuation: "."
+    },
+    {
+        id: 5,
+        question: "Why did the professor want to meet with you?",
+        fixedWords: ["wasn't sure"],
+        fixedPositions: [1],
+        options: ["she", "if", "everyone was", "the", "aware of", "updates"],
+        correctAnswer: ["She", "wasn't sure", "if", "everyone was", "aware of", "the", "updates"],
+        endingPunctuation: "."
+    },
+    {
+        id: 6,
+        question: "I had to miss the literature class yesterday.",
+        fixedWords: ["someone"],
+        fixedPositions: [5],
+        options: ["get", "from", "did you", "notes", "the"],
+        correctAnswer: ["Did you", "get", "the", "notes", "from", "someone"],
+        endingPunctuation: "?"
+    },
+    {
+        id: 7,
+        question: "I just finished reading the latest bestseller novel assigned for our literature class.",
+        fixedWords: ["weekend"],
+        fixedPositions: [6],
+        options: ["signing books", "the author", "know if", "do you", "will be", "this"],
+        correctAnswer: ["Do you", "know if", "the author", "will be", "signing books", "this", "weekend"],
+        endingPunctuation: "?"
+    },
+    {
+        id: 8,
+        question: "What did your professor say on the last day of class?",
+        fixedWords: ["He was"],
+        fixedPositions: [0],
+        options: ["had enjoyed most", "the students", "which lesson", "curious about"],
+        correctAnswer: ["He was", "curious about", "which lesson", "the students", "had enjoyed most"],
+        endingPunctuation: "."
+    },
+    {
+        id: 9,
+        question: "Why aren't you participating in the class debate?",
+        fixedWords: [],
+        fixedPositions: [],
+        options: ["they", "does", "me", "not", "interest", "chose", "the topic"],
+        correctAnswer: ["The topic", "they", "chose", "does", "not", "interest", "me"],
+        endingPunctuation: "."
+    },
+    {
+        id: 10,
+        question: "I missed the last bus to school.",
+        fixedWords: [],
+        fixedPositions: [],
+        options: ["call", "taxi instead", "can you", "a"],
+        correctAnswer: ["Can you", "call", "a", "taxi instead"],
+        endingPunctuation: "?"
+    }
+];
+
+const set45Questions = [
+    {
+        id: 1,
+        question: "I have a job interview for the school dining hall position soon.",
+        fixedWords: [],
+        fixedPositions: [],
+        options: ["did you", "to common", "interview questions", "prepare", "your answers"],
+        correctAnswer: ["Did you", "prepare", "your answers", "to common", "interview questions"],
+        endingPunctuation: "?"
+    },
+    {
+        id: 2,
+        question: "What did the professor say about our group project?",
+        fixedWords: [],
+        fixedPositions: [],
+        options: ["our teamwork", "to discuss", "and time management", "how we", "could improve", "she wanted"],
+        correctAnswer: ["She wanted", "to discuss", "how we", "could improve", "our teamwork", "and time management"],
+        endingPunctuation: "."
+    },
+    {
+        id: 3,
+        question: "Did you enjoy the drama club's performance last night?",
+        fixedWords: ["was"],
+        fixedPositions: [2],
+        options: ["very", "not", "the", "compelling", "storyline"],
+        correctAnswer: ["The", "storyline", "was", "not", "very", "compelling"],
+        endingPunctuation: "."
+    },
+    {
+        id: 4,
+        question: "I heard there will be a workshop on creative writing next month.",
+        fixedWords: [],
+        fixedPositions: [],
+        options: ["know if", "do you", "yet", "is open", "the registration"],
+        correctAnswer: ["Do you", "know if", "the registration", "is open", "yet"],
+        endingPunctuation: "?"
+    },
+    {
+        id: 5,
+        question: "Did you hear about the new restaurant that opened near campus?",
+        fixedWords: ["haven't"],
+        fixedPositions: [1],
+        options: ["the", "about", "new", "I", "heard", "restaurant"],
+        correctAnswer: ["I", "haven't", "heard", "about", "the", "new", "restaurant"],
+        endingPunctuation: "."
+    },
+    {
+        id: 6,
+        question: "I am planning to organize the school's annual charity event next month.",
+        fixedWords: ["yet"],
+        fixedPositions: [6],
+        options: ["have", "the", "you", "decided", "location", "on"],
+        correctAnswer: ["Have", "you", "decided", "on", "the", "location", "yet"],
+        endingPunctuation: "?"
+    },
+    {
+        id: 7,
+        question: "I've enrolled in a dance class for this semester.",
+        fixedWords: ["learning"],
+        fixedPositions: [6],
+        options: ["of", "dance", "what style", "will", "you", "be"],
+        correctAnswer: ["What style", "of", "dance", "will", "you", "be", "learning"],
+        endingPunctuation: "?"
+    },
+    {
+        id: 8,
+        question: "What was Maria asking about just now?",
+        fixedWords: ["I think"],
+        fixedPositions: [0],
+        options: ["to study", "what time", "to know", "she wants", "you'll be available", "for the exam"],
+        correctAnswer: ["I think", "she wants", "to know", "what time", "you'll be available", "to study", "for the exam"],
+        endingPunctuation: "."
+    },
+    {
+        id: 9,
+        question: "I've been thinking about joining a new club at the university. Do you have any suggestions?",
+        fixedWords: ["I heard"],
+        fixedPositions: [0],
+        options: ["environmental issues", "which you", "club that", "there's a", "focuses on", "might find interesting"],
+        correctAnswer: ["I heard", "there's a", "club that", "focuses on", "environmental issues", "which you", "might find interesting"],
+        endingPunctuation: "."
+    },
+    {
+        id: 10,
+        question: "What did the counselor say about your course schedule?",
+        fixedWords: [],
+        fixedPositions: [],
+        options: ["that", "she wanted", "overlap", "classes", "to ensure", "don't", "my"],
+        correctAnswer: ["She wanted", "to ensure", "that", "my", "classes", "don't", "overlap"],
+        endingPunctuation: "."
+    }
+];
+
+const set46Questions = [
+    {
+        id: 1,
+        question: "Did the professor have any feedback about your research paper?",
+        fixedWords: ["He"],
+        fixedPositions: [0],
+        options: ["could explain", "was used", "asked if", "for data", "analysis", "I", "what methodology"],
+        correctAnswer: ["He", "asked if", "I", "could explain", "what methodology", "was used", "for data", "analysis"],
+        endingPunctuation: "."
+    },
+    {
+        id: 2,
+        question: "Did you manage to complete the class project on time?",
+        fixedWords: ["There were"],
+        fixedPositions: [0],
+        options: ["in", "delays", "no", "final", "the", "stages"],
+        correctAnswer: ["There were", "no", "delays", "in", "the", "final", "stages"],
+        endingPunctuation: "."
+    },
+    {
+        id: 3,
+        question: "I'm looking for a new apartment closer to school.",
+        fixedWords: ["you"],
+        fixedPositions: [1],
+        options: ["contact", "any", "estate", "did", "real", "agents"],
+        correctAnswer: ["Did", "you", "contact", "any", "real", "estate", "agents"],
+        endingPunctuation: "?"
+    },
+    {
+        id: 4,
+        question: "I'm planning a weekend getaway to the mountains for our class.",
+        fixedWords: ["are"],
+        fixedPositions: [2],
+        options: ["you", "what", "planning", "do", "activities", "to"],
+        correctAnswer: ["What", "activities", "are", "you", "planning", "to", "do"],
+        endingPunctuation: "?"
+    },
+    {
+        id: 5,
+        question: "Why did you extend your office hours to meet with those students?",
+        fixedWords: ["They were", "will"],
+        fixedPositions: [0, 4],
+        options: ["know", "curious to", "be used", "to grade", "what criteria", "their group assignment"],
+        correctAnswer: ["They were", "curious to", "know", "what criteria", "will", "be used", "to grade", "their group assignment"],
+        endingPunctuation: "."
+    },
+    {
+        id: 6,
+        question: "Our class meeting has been rescheduled to Friday morning.",
+        fixedWords: ["Can"],
+        fixedPositions: [0],
+        options: ["tell", "affect our", "me whether", "you", "it will", "project deadlines"],
+        correctAnswer: ["Can", "you", "tell", "me whether", "it will", "affect our", "project deadlines"],
+        endingPunctuation: "?"
+    },
+    {
+        id: 7,
+        question: "I heard the school drama club is putting on a new play next month.",
+        fixedWords: ["sale"],
+        fixedPositions: [4],
+        options: ["already on", "do you", "know if", "tickets are"],
+        correctAnswer: ["Do you", "know if", "tickets are", "already on", "sale"],
+        endingPunctuation: "?"
+    },
+    {
+        id: 8,
+        question: "Did you see the new art exhibit at the museum near campus?",
+        fixedWords: ["stunning"],
+        fixedPositions: [5],
+        options: ["that were", "the main", "displayed in", "the paintings", "hall were"],
+        correctAnswer: ["The paintings", "that were", "displayed in", "the main", "hall were", "stunning"],
+        endingPunctuation: "."
+    },
+    {
+        id: 9,
+        question: "Have you decided which book to read for the book club meeting next week?",
+        fixedWords: ["month"],
+        fixedPositions: [6],
+        options: ["that my", "the novel", "last", "I'm considering", "recommended", "friend"],
+        correctAnswer: ["I'm considering", "the novel", "that my", "friend", "recommended", "last", "month"],
+        endingPunctuation: "."
+    },
+    {
+        id: 10,
+        question: "When should we have the surprise party for your classmate?",
+        fixedWords: ["I believe"],
+        fixedPositions: [0],
+        options: ["be best", "her schedule", "who know", "her friends", "it would", "to ask"],
+        correctAnswer: ["I believe", "it would", "be best", "to ask", "her friends", "who know", "her schedule"],
+        endingPunctuation: "."
+    }
+];
+
 
 
 const allSetsData = [];
@@ -4428,7 +4818,7 @@ const allSetsData = [];
             "Peer Review", "Final Revision"
         ];
 
-        for (let i = 0; i < 42; i++) {
+        for (let i = 0; i < 46; i++) {
             let questions = [];
             if (i === 0) questions = set1Questions;
             else if (i === 1) questions = set2Questions;
@@ -4473,6 +4863,9 @@ const allSetsData = [];
             else if (i === 40) questions = set41Questions;
             else if (i === 41) questions = set42Questions;
             else if (i === 42) questions = set43Questions;
+            else if (i === 43) questions = set44Questions;
+            else if (i === 44) questions = set45Questions;
+            else if (i === 45) questions = set46Questions;
 
             allSetsData.push({
                 id: i + 1,
@@ -4483,81 +4876,120 @@ const allSetsData = [];
             });
         }
 
+// ========== Google Sheets 数据上报配置 ==========
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwGWI5DLpoaytWmgTa0vtPxb77q3DKg6DjynQgdMWOsruWarXmhDmQrbS6S2LWF40V3Qw/exec';
 
-        // ========== Google Sheets 数据上报配置 ==========
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxC4BD2Xp8sG9xGuy1UHxo96gA3tCEhiCsOFfUk2ZPv2MfVN7adRTkJ2qrsIZrNuZEDWg/exec';
-        
-        // 生成/获取用户唯一ID
-        function getUserId() {
-            let uid = localStorage.getItem('practice_user_id');
-            if (!uid) {
-                uid = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
-                localStorage.setItem('practice_user_id', uid);
-            }
-            return uid;
-        }
-        
-        // 上报数据到Google Sheets（使用图片请求，避免CORS）
-        function submitToGoogleSheets(correctCount, percentage) {
-            if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes('你的部署ID')) {
-                console.log('Google Sheets URL未配置，跳过上报');
-                return;
-            }
-            
-            const userId = getUserId();
-const timestamp = new Date().toLocaleString('zh-CN', { 
-    timeZone: 'Asia/Shanghai',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false
-}).replace(/\//g, '-');
-            const totalQuestions = currentSet ? currentSet.questions.length : 10;
-            
-            // 收集错题题号
-            const wrongQuestions = [];
-            if (currentSet && currentSet.questions) {
-                currentSet.questions.forEach(function(q, idx) {
-                    const isCorrect = checkAnswer(idx);
-                    if (!isCorrect) {
-                        wrongQuestions.push(idx + 1); // 题号从1开始
-                    }
-                });
-            }
-            
-            // 错题题号用逗号连接，如果没有错题显示"无"
-            const wrongQuestionsStr = wrongQuestions.length > 0 
-                ? wrongQuestions.join(', ') 
-                : '无';
-            
-            // 构建上报数据
-            const params = new URLSearchParams();
-            params.append('userId', userId);
-            params.append('timestamp', timestamp);
-            params.append('setId', String(currentSetId));
-            params.append('totalQuestions', String(totalQuestions));
-            params.append('correctCount', String(correctCount));
-            params.append('wrongCount', String(totalQuestions - correctCount));
-            params.append('score', String(percentage));
-            params.append('timeSpent', String(400 - timeRemaining));
-            params.append('wrongQuestions', wrongQuestionsStr); // 错题题号
-            
-            // 使用图片请求发送（避免CORS预检）
-            const img = new Image();
-            img.src = GOOGLE_SCRIPT_URL + '?' + params.toString();
-            
-            console.log('练习数据已上报:', {
-                userId: userId,
-                setId: currentSetId,
-                score: percentage + '%',
-                wrongQuestions: wrongQuestionsStr
+// ========== 地理位置获取 ==========
+let userCity = 'Unknown';
+let userCountry = 'Unknown';
+let locationReady = false;
+
+function getUserLocation() {
+    return new Promise((resolve) => {
+        fetch('https://ipapi.co/json/')
+            .then(response => response.json())
+            .then(data => {
+                userCity = data.city || data.region || 'Unknown';
+                userCountry = data.country_name || 'Unknown';
+                locationReady = true;
+                console.log('📍 用户位置:', userCity, ',', userCountry);
+                resolve();
+            })
+            .catch(error => {
+                console.log('ipapi 失败，尝试备用方案:', error);
+                fetch('https://ipinfo.io/json')
+                    .then(response => response.json())
+                    .then(data => {
+                        userCity = data.city || 'Unknown';
+                        userCountry = data.country || 'Unknown';
+                        locationReady = true;
+                        console.log('📍 备用位置:', userCity, ',', userCountry);
+                        resolve();
+                    })
+                    .catch(() => {
+                        console.log('位置获取失败，使用默认值');
+                        resolve();
+                    });
             });
-        }
-        // ========== Google Sheets 配置结束 ==========
+    });
+}
 
+// 页面加载时异步获取位置
+getUserLocation();
+// ========== 地理位置获取结束 ==========
+
+// 生成/获取用户唯一ID
+function getUserId() {
+    let uid = localStorage.getItem('practice_user_id');
+    if (!uid) {
+        uid = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+        localStorage.setItem('practice_user_id', uid);
+    }
+    return uid;
+}
+
+// 上报数据到Google Sheets
+function submitToGoogleSheets(correctCount, percentage) {
+    if (!GOOGLE_SCRIPT_URL) {
+        console.log('Google Sheets URL未配置，跳过上报');
+        return;
+    }
+    
+    const userId = getUserId();
+    const timestamp = new Date().toLocaleString('zh-CN', { 
+        timeZone: 'Asia/Shanghai',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+    }).replace(/\//g, '-');
+    const totalQuestions = currentSet ? currentSet.questions.length : 10;
+    
+    // 收集错题题号
+    const wrongQuestions = [];
+    if (currentSet && currentSet.questions) {
+        currentSet.questions.forEach(function(q, idx) {
+            const isCorrect = checkAnswer(idx);
+            if (!isCorrect) {
+                wrongQuestions.push(idx + 1);
+            }
+        });
+    }
+    
+    const wrongQuestionsStr = wrongQuestions.length > 0 
+        ? wrongQuestions.join(', ') 
+        : '无';
+    
+    // 构建上报数据
+    const params = new URLSearchParams();
+    params.append('userId', userId);
+    params.append('timestamp', timestamp);
+    params.append('setId', String(currentSetId));
+    params.append('totalQuestions', String(totalQuestions));
+    params.append('correctCount', String(correctCount));
+    params.append('wrongCount', String(totalQuestions - correctCount));
+    params.append('score', String(percentage));
+    params.append('timeSpent', String(400 - timeRemaining));
+    params.append('wrongQuestions', wrongQuestionsStr);
+    params.append('city', userCity);
+    params.append('country', userCountry);
+    
+    // 使用图片请求发送（避免CORS预检）
+    const img = new Image();
+    img.src = GOOGLE_SCRIPT_URL + '?' + params.toString();
+    
+    console.log('✅ 练习数据已上报:', {
+        userId: userId,
+        setId: currentSetId,
+        score: percentage + '%',
+        wrongQuestions: wrongQuestionsStr,
+        city: userCity,
+        country: userCountry
+    });
+}
 
 
         let userProgress = JSON.parse(localStorage.getItem('toefl_progress') || '{}');
@@ -4890,10 +5322,7 @@ function startCategorySet(categoryKey, setIndex) {
                         slot.textContent = userAnswers[index][blankIndex];
                         slot.classList.add('filled');
                     }
-              slot.addEventListener('dragover', handleDragOver);
-slot.addEventListener('dragleave', handleDragLeave);
-// 注意：不要在这里绑定 handleDrop，因为下面已经有完整的 drop 处理了
-                    
+             
 
         
                     (function(currentBlankIndex) {
@@ -4921,13 +5350,14 @@ slot.addEventListener('dragleave', handleDragLeave);
     slot.addEventListener('dragend', function(e) {
         slot.classList.remove('dragging');
     });
-    slot.addEventListener('dragover', function(e) {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-        if (!submitted && slot !== e.target) {
-            slot.classList.add('drag-over');
-        }
-    });
+   slot.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    e.stopPropagation();  // 阻止冒泡到 blank-container
+    e.dataTransfer.dropEffect = 'move';
+    if (!submitted && slot !== e.target) {
+        slot.classList.add('drag-over');
+    }
+});
     slot.addEventListener('dragleave', function(e) {
         slot.classList.remove('drag-over');
     });
