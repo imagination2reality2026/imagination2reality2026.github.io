@@ -2,8 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Build a Sentence ©️by张晗老师</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">    <title>Build a Sentence ©️by张晗老师</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -32,10 +31,11 @@
     color: #ffffff;            
     border-radius: 25px;
     padding: 12px 24px;
-    width: 320px;
+    width: 400px;
     font-size: 16px;
     font-family: 'Open Sans', sans-serif;
     outline: none;
+    -webkit-text-size-adjust: 100%;
 }
 
 .search-box input::placeholder {
@@ -68,22 +68,22 @@
 }
 
 .search-box button:hover {
-    background: #FFC000;     /* 悬停深蓝 */
+    background: #FFC000; 
     transform: translateY(-1px);
 }
 
 @media (max-width: 768px) {
     .search-box input {
-        width: 90px;
-        padding: 6px 10px;
-        font-size: 13px;
+        width: 200px;
+        padding: 10px 16px;
+        font-size: 14px;
     }
     .search-box input:focus {
-        width: 100px;
+        width: 260px;
     }
     .search-box button {
-        padding: 6px 12px;
-        font-size: 13px;
+        padding: 8px 18px;
+        font-size: 16px;
     }
 }
         
